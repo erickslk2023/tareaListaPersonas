@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const db = require('../database/conn');
+const db = require ('../database/conn');
 
 app.get('',  async (req, res)=>{
 
@@ -22,33 +22,21 @@ app.post('', async ( req, res)=>{
 
 app.put('/:id', async ( req, res)=>{
 
-    const { name, description, finish } = req.body;
+    const { nombre, apellido } = req.body;
     const id = req.params.id;
-    const params =   [ name , description, finish, id];
+    const params =   [ id, nombre , apellido];
     let sql = ` update table_lista 
-                    set nombre = $1, 
-                    aplellido = $2
+                    set nombre = $2, 
+                    apellido = $3
                     
-                where id = $4
+                where id = $1
                     returning *  `;
     const result = await db.query(sql , params);
     res.json(result);
 
 })
 
-app.put('/finalizarTarea/:id', async (req, res)=>{
 
-    const id = req.params.id;
-    const params =   [ id];
-    let sql = ` update tbl_tareas 
-                    set finish = true
-                where id = $1
-                    returning *  `;
-    const result = await db.query(sql , params);
-    res.json(result);
-
-
-});
 
 
 app.delete('/:id', async (req, res)=>{
